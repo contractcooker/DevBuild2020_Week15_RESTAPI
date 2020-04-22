@@ -22,7 +22,7 @@ namespace IceCreamAPI.Controllers
         [HttpGet]
         public string[] GetCategories()
         {
-            return dal.GetProductCategories();
+            return dal.GetMovieCategories();
         }
 
     }

@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using IceCreamAPI.Models;
+using IceCreamApi.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -15,21 +15,21 @@ namespace IceCreamAPI.Services
 
         public DALSqlServer(IConfiguration config)
         {
-            connectionString = config.GetConnectionString("iceCreamDB");
+            connectionString = config.GetConnectionString("movieDB");
         }
 
-        public int CreateProduct(Product p)
+        public int CreateMovie(Movie m)
         {
             SqlConnection connection = null;
-            string queryString = "INSERT INTO Products (Name, Price, Description, Category)";
-            queryString += " VALUES (@Name, @Price, @Description, @Category);";
+            string queryString = "INSERT INTO Movies (Name, Category)";
+            queryString += " VALUES (@Name, @Category);";
             queryString += " SELECT SCOPE_IDENTITY();";
             int newId;
 
             try
             {
                 connection = new SqlConnection(connectionString);
-                newId = connection.ExecuteScalar<int>(queryString, p);
+                newId = connection.ExecuteScalar<int>(queryString, m);
             }
             catch (Exception e)
             {
@@ -47,27 +47,26 @@ namespace IceCreamAPI.Services
             return newId;
         }
 
-        public int DeleteProductById(int id)
+        public int DeleteMovieById(int id)
         {
-            //TODO: Refactor with try/catch
+            //TODO: REfactor with try/catch
             SqlConnection connection = new SqlConnection(connectionString);
-            string deleteCommand = "DELETE FROM Products WHERE ID = @id";
+            string deleteCommand = "DELETE FROM Movies WHERE ID = @Id";
 
             int rows = connection.Execute(deleteCommand, new { id = id });
-
             return rows;
         }
 
-        public string[] GetProductCategories()
+        public string[] GetMovieCategories()
         {
             SqlConnection connection = null;
-            string queryString = "SELECT DISTINCT Category FROM Products";
-            IEnumerable<Product> Products = null;
+            string queryString = "SELECT DISTINCT Category FROM Movies";
+            IEnumerable<Movie> Movies = null;
 
             try
             {
                 connection = new SqlConnection(connectionString);
-                Products = connection.Query<Product>(queryString);
+                Movies = connection.Query<Movie>(queryString);
             }
             catch (Exception e)
             {
@@ -80,19 +79,19 @@ namespace IceCreamAPI.Services
                     connection.Close(); //explicitly closing the connection
                 }
             }
-           
-            if (Products == null)
+
+            if (Movies == null)
             {
                 return null;
             }
             else
             {
-                string[] categories = new string[Products.Count()];
+                string[] categories = new string[Movies.Count()];
                 int count = 0;
 
-                foreach (Product p in Products)
+                foreach (Movie m in Movies)
                 {
-                    categories[count] = p.Category;
+                    categories[count] = m.Category;
                     count++;
                 }
 
@@ -101,16 +100,16 @@ namespace IceCreamAPI.Services
 
         }
 
-        public IEnumerable<Product> GetProductsAll()
+        public IEnumerable<Movie> GetMoviesAll()
         {
             SqlConnection connection = null;
-            string queryString = "SELECT * FROM Products";
-            IEnumerable<Product> Products = null;
+            string queryString = "SELECT * FROM Movies";
+            IEnumerable<Movie> Movies = null;
 
             try
             {
                 connection = new SqlConnection(connectionString);
-                Products = connection.Query<Product>(queryString);
+                Movies = connection.Query<Movie>(queryString);
             }
             catch (Exception e)
             {
@@ -124,19 +123,19 @@ namespace IceCreamAPI.Services
                 }
             }
 
-            return Products;
+            return Movies;
         }
 
-        public IEnumerable<Product> GetProductsByCategory(string category)
+        public IEnumerable<Movie> GetMoviesByCategory(string category)
         {
             SqlConnection connection = null;
-            string queryString = "SELECT * FROM Products WHERE Category = @cat";
-            IEnumerable<Product> Products = null;
+            string queryString = "SELECT * FROM Movies WHERE Category = @cat";
+            IEnumerable<Movie> Movies = null;
 
             try
             {
                 connection = new SqlConnection(connectionString);
-                Products = connection.Query<Product>(queryString, new { cat = category } );
+                Movies = connection.Query<Movie>(queryString, new { cat = category });
             }
             catch (Exception e)
             {
@@ -150,19 +149,19 @@ namespace IceCreamAPI.Services
                 }
             }
 
-            return Products;
+            return Movies;
         }
 
-        public Product GetProductById(int id)
+        public Movie GetMovieById(int id)
         {
             SqlConnection connection = null;
-            string queryString = "SELECT * FROM Products WHERE Id = @id";
-            Product product = null;
+            string queryString = "SELECT * FROM Movies WHERE Id = @id";
+            Movie movie = null;
 
             try
             {
                 connection = new SqlConnection(connectionString);
-                product = connection.QueryFirstOrDefault<Product>(queryString, new { id = id });
+                movie = connection.QueryFirstOrDefault<Movie>(queryString, new { id = id });
             }
             catch (Exception e)
             {
@@ -176,8 +175,38 @@ namespace IceCreamAPI.Services
                 }
             }
 
-            return product;
+            return movie;
         }
 
+        public Movie GetMovieByRow(int id)
+        {
+            SqlConnection connection = null;
+            string queryString = "SELECT * FROM Movies ORDER BY Id ASC OFFSET @id ROWS FETCH NEXT 1 ROWS ONLY";
+            Movie movie = null;
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                movie = connection.QueryFirstOrDefault<Movie>(queryString, new { id = id });
+            }
+            catch (Exception e)
+            {
+                //log the error--get details from e
+            }
+            finally //cleanup!
+            {
+                if (connection != null)
+                {
+                    connection.Close(); //explicitly closing the connection
+                }
+            }
+
+            return movie;
+        }
+
+        public Movie GetMovieByCategoryByRow(int random)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

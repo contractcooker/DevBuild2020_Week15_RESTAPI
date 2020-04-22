@@ -1,0 +1,32 @@
+﻿<Properties StartupConfiguration="{A6348A8A-06F4-403A-B01D-DB3FE25B2166}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="IceCreamAPI/Controllers/MovieController.cs">
+    <Files>
+      <File FileName="IceCreamAPI/appsettings.json" Line="14" Column="1" />
+      <File FileName="IceCreamAPI/Services/IDAL.cs" Line="14" Column="41" />
+      <File FileName="IceCreamAPI/Services/DALSqlServer.cs" Line="184" Column="110" />
+      <File FileName="IceCreamAPI/Models/Movie.cs" Line="3" Column="2" />
+      <File FileName="IceCreamAPI/Controllers/CategoryController.cs" Line="29" Column="2" />
+      <File FileName="IceCreamAPI/Controllers/MovieController.cs" Line="64" Column="30" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="IceCreamAPI" expanded="True" selected="True">
+            <Node name="IceCreamAPI" expanded="True">
+              <Node name="Controllers" expanded="True" />
+              <Node name="Models" expanded="True" />
+              <Node name="Services" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.IceCreamAPI PreferredExecutionTarget="/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
